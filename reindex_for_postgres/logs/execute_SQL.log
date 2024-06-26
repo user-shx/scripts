@@ -1,0 +1,11 @@
+2024/06/26 09:41:58 Successfully connected to the postgres database
+2024/06/26 09:41:58 Connected to business database: shxdb
+2024/06/26 09:41:59 Worker 2: database: shxdb, Successfully executed: REINDEX INDEX "public"."backup_test_pkey" (Duration: 15.3854ms)
+2024/06/26 09:41:59 Worker 9: database: shxdb, Successfully executed: REINDEX INDEX "public"."sales_p3_pkey" (Duration: 58.662ms)
+2024/06/26 09:41:59 Worker 1: database: shxdb, Successfully executed: REINDEX INDEX "public"."sales_p1_pkey" (Duration: 59.6014ms)
+2024/06/26 09:41:59 Worker 6: database: shxdb, Successfully executed: REINDEX INDEX "public"."sales_p2_pkey" (Duration: 60.6096ms)
+2024/06/26 09:41:59 Worker 10: database: shxdb, Successfully executed: REINDEX INDEX "public"."sales_p4_pkey" (Duration: 60.1009ms)
+2024/06/26 09:41:59 Worker 5: database: shxdb, Successfully executed: REINDEX INDEX "public"."t11_pkey" (Duration: 62.5077ms)
+2024/06/26 09:41:59 Worker 4: database: shxdb, Successfully executed: REINDEX INDEX "public"."idx_t11" (Duration: 173.5329ms)
+2024/06/26 09:41:59 Worker 3: database: shxdb, Error executing: REINDEX INDEX "public"."sales_pkey": pq: REINDEX is not yet implemented for partitioned indexes
+2024/06/26 09:41:59 All tasks completed
