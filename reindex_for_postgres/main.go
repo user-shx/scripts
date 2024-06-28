@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
+	"flag"
 	"fmt"
 	"io"
 	"log"
@@ -19,16 +20,6 @@ type IndexInfo struct {
 	IndexName  string `json:"index_name"`
 }
 
-type DatabaseInfo struct {
-	DBName  string      `json:"db_name"`
-	Indexes []IndexInfo `json:"indexes"`
-}
-
-type ClusterInfo struct {
-	ClusterName string         `json:"cluster_name"`
-	Databases   []DatabaseInfo `json:"databases"`
-}
-
 // DBConfig 用于存储数据库连接信息
 type DBConfig struct {
 	Host     string `json:"host"`
@@ -40,14 +31,27 @@ type DBConfig struct {
 }
 
 func main() {
+	// 命令行参数
+	version := "0.0.1"
+	var printVersion bool
+	configFile := flag.String("config", "./conf/config.json", "Path to the database config file")
+	numWorkers := flag.Int("workers", 10, "Number of concurrent workers")
+	flag.BoolVar(&printVersion, "version", false, "print program build version")
+	flag.Parse()
+
+	if printVersion {
+		fmt.Printf("Reindex Tool: %s\n", version)
+		os.Exit(0)
+	}
+
 	// 加载数据库配置
-	config, err := loadDBConfig("./conf/config.json")
+	config, err := loadDBConfig(*configFile)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// 日志设置
-	logFilePath := fmt.Sprintf("./logs/execute_SQL_%s_%s.log", config.Host, config.Port)
+	logFilePath := fmt.Sprintf("./logs/reindex_index_%s_%s.log", config.Host, config.Port)
 	logger, err := initLogger(logFilePath)
 	if err != nil {
 		log.Fatal(err)
@@ -73,7 +77,7 @@ func main() {
 	var wg sync.WaitGroup
 
 	// 设置并发的 worker 数量
-	numWorkers := 10
+	// numWorkers := 10
 
 	// 创建进度条
 	totalTasks := 0
@@ -116,7 +120,7 @@ func main() {
 		progress := pb.StartNew(len(indexes))
 
 		// 启动 worker
-		for w := 1; w <= numWorkers; w++ {
+		for w := 1; w <= *numWorkers; w++ {
 			wg.Add(1)
 			go worker(w, db, sqlStatements, results, &wg, logger, dbName)
 		}
